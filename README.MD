@@ -16,15 +16,21 @@
 
 ##### => can copy from .env.examp file and change variable value
 
+###  - Run server
+
+##### cd server
+
+##### npm run watch-server
+
 ###  - Run client
 
 ##### cd client
 
 ##### npm run watch-client
 
-###  - Run server
 
-##### cd server
 
-##### npm run watch-server
+
+
+
 
