@@ -1,29 +1,30 @@
-```
-# Add library
 
-npm i
+###  - Add library
 
-# Import data mySQL
+##### npm i
 
-DATABASE.sql
+### - Import data mySQL
 
-# Setting auth mysql
+#####  DATABASE.sql
 
-cd server
+###  - Setting auth mysql
 
-Create file .env in folder server, create các global variables with name (DATABASTE_HOST, DATABASE_USER, DATABASE_PORT, DATABASE_NAME, DATABASE_PASSWORD)
+##### cd server
 
-=> can copy from .env.examp file and change variable value
+##### Create file .env in folder server, create các global variables with name (DATABASTE_HOST, DATABASE_USER, DATABASE_PORT, DATABASE_NAME, 
+##### DATABASE_PASSWORD)
 
-# run client
+##### => can copy from .env.examp file and change variable value
 
-cd client
+###  - Run client
 
-npm run watch-client
+##### cd client
 
-# run server
+##### npm run watch-client
 
-cd server
+###  - Run server
 
-npm run watch-server
-```
+##### cd server
+
+##### npm run watch-server
+
