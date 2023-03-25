@@ -1,89 +1,118 @@
 .footer {
-    background-color: var(--footer-background-color);
-    padding: 16px 5%;
-    padding-top: 50px;
-    width: 100%;
-    top: 0;
-    right: 0;
-    transition: all 0.5s ease-in-out;
-}
+  background-color: var(--footer-background-color);
+  padding: 50px 5% 16px;
+  width: 100%;
+  top: 0;
+  right: 0;
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
 
-.footer_content {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-}
+  ul {
+    padding: 0;
+    margin: 0;
+  }
 
-.flex-container {
-    display: flex;
-    justify-content: space-between;
-}
-
-.footer h6 {
+  h6 {
     font-size: 20px;
     color: var(--white);
     margin-bottom: 15px;
-}
+  }
 
-.footer p {
-    margin-bottom: 16px;
+  p {
+    margin: 0;
     font-size: 16px;
     color: rgb(223, 223, 223);
+  }
+}
+
+.footer_content {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-around;
 }
 
 .footer_overview {
-    text-align: left;
-    margin-bottom: 5px;
-    margin-right: 30px;
+  text-align: left;
+  margin-bottom: 20px;
+  margin-right: 30px;
 }
 
 .footer_overview p {
-    width: 320px;
+  width: 320px;
 }
 
 .footer_logo {
-    max-height: 33px;
-    margin-bottom: 10px
+  max-height: 33px;
+  margin-bottom: 10px;
 }
 
 .footer_icon {
-    padding-top: 20px;
+  padding-top: 20px;
 }
 
 .footer_icon a {
-    margin: 0 10 0 0px;
-    padding: 5px;
+  margin: 0 10 0 0px;
+  padding: 5px;
 }
 
 .footer_icon img {
-    width: 90px;
+  width: 90px;
 }
 
 .footer_category {
-    text-align: center;
-    margin: 0px;
-    padding: 0px;
-    width: 350px;
+  text-align: center;
+  margin: 0px;
+  padding: 0px;
+  width: 350px;
 }
 
 .footer_category_content {
-    padding: 0 15px;
-    margin-right: 20px;
-}
+  margin: 0 15px;
+  text-align: left;
 
-.footer_category_content a {
+  a {
     text-decoration: none;
-}
+  }
 
-.footer_category_content p:hover {
+  p:hover {
     color: #9b9a9a;
+  }
 }
 
 .footer_category_content ul li {
-    text-align: left;
+  display: block;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 16px;
+  padding: 0;
 }
 
-.footer_category_content ul li {
-    text-align: left;
-    cursor: pointer;
+// Responsive
+@media only screen and (max-width: 1350px) {
+  .footer_content {
+    flex-wrap: wrap;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .footer_overview {
+    padding-right: 4px;
+    margin-right: 0;
+    p {
+      width: 100%;
+    }
+
+    .footer_icon {
+      display: flex;
+    }
+  }
+
+  .footer_category_content p {
+    font-size: 1rem !important;
+  }
 }

@@ -1,10 +1,13 @@
 .background-login {
   position: relative;
-  background-image: var(--gradient-to-bottom-black),
+  background-image: var(--gradient-to-top-black),
     url("../../imgs/background_login.jpg");
   height: 100vh;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  overflow-y: hidden;
 }
 
 .logo_link {
@@ -65,7 +68,6 @@
   outline: none;
   margin: 8px 0 30px;
   border: 1px solid var(--while);
-  // box-shadow: 0 5px 10px 0 rgba(55, 57, 65, 0.5);
 
   &:focus {
     border: 1px solid var(--primary);
@@ -119,5 +121,33 @@
   .register_link {
     display: inline;
     color: var(--primary);
+  }
+}
+
+// Responsive
+@media only screen and (max-width: 850px) {
+  .logo_link {
+    left: 16px;
+    top: 16px;
+  }
+  .background-login {
+    overflow-y: auto;
+    width: 100%;
+    .login {
+      width: 100%;
+      height: 100%;
+      padding: 76px 16px 16px;
+      max-width: none;
+    }
+  }
+
+  .login_input {
+    margin-bottom: 16px;
+  }
+}
+
+@media only screen and (max-height: 500px) {
+  .background-login {
+    height: auto;
   }
 }

@@ -1,245 +1,430 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "antd";
 import classNames from "classnames/bind";
-import Header from "../../components/Header/Header";
-import styles from "./Home.module.scss";
-import Footer from "../../components/Footer/Footer";
 import { useState, useEffect } from "react";
-import CardFilm from "../Home/CardFilm/CardFilm";
-import SlideHome from "../Home/SlideHome/SlideHome";
-import HotSlide from "./HotSlide/HotSlide";
 import { LoadingOutlined } from "@ant-design/icons";
-
-import imgBanner1 from "../../imgs/conan.jpg";
-import imgBanner2 from "../../imgs/doraemonbanner.jpg";
-import imgBanner3 from "../../imgs/conan.jpg";
-import imgBanner4 from "../../imgs/doraemonbanner.jpg";
-
-import imgAdds from "../../imgs/adds.jpg";
-
-import imgSlideUp1 from "../../imgs/down.png";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+
+import styles from "./Home.module.scss";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import HotSlide from "../../components/Home/HotSlide/HotSlide";
+import CardFilm from "../../components/Home/CardFilm/CardFilm";
+import SlideHome from "../../components/Home/SlideHome/SlideHome";
+
+import imgSlideUp1 from "../../imgs/HotSlide/one_piece.png";
+import imgSlideUp2 from "../../imgs/HotSlide/doraemon.png";
+import imgSlideUp3 from "../../imgs/HotSlide/naruto.png";
+import imgSlideUp4 from "../../imgs/HotSlide/demon_slayder.png";
+import imgSlideUp5 from "../../imgs/HotSlide/conan.png";
+import imgSlideUp6 from "../../imgs/HotSlide/pokemon.png";
 
 const cx = classNames.bind(styles);
 
 const Home = ({ user, setIsSignUp }) => {
   let { page } = useParams();
-  if (page === undefined) page = "1";
-  const [checkedRadio, setCheckedRadio] = useState("");
-  const [countSlide, setCountSlide] = useState(1);
+  const [searchParams] = useSearchParams();
+  const searchFilm = searchParams.get("Search");
+  const category = searchParams.get("Category");
+  if (page === undefined || Number(page) <= 0) page = "1";
   const [isHasData, setIsHasData] = useState(false);
   const [films, setFilms] = useState();
+  const [filterFilms, setFilterFilms] = useState();
+  const [filterPage, setFilterPage] = useState("");
   const getDataFilms = async () => {
     setIsHasData(false);
-    const res = await axios.get("/api/user/getFilm");
-    setFilms(res.data);
+    if (films === undefined) {
+      const res = await axios.get("/api/film/getFilm");
+      setFilms(res.data);
+    }
+
     setIsHasData(true);
   };
-  const slideEffect = () => {
-    setTimeout(function () {
-      setCountSlide(countSlide + 1);
-      setCheckedRadio("radio" + countSlide);
-      if (countSlide > 4) {
-        setCountSlide(1);
+  const funcFilterFilms = () => {
+    if (films) {
+      if (searchFilm) {
+        const searchResult = films.filter((film) => {
+          return film.filmName
+            .toUpperCase()
+            .includes(searchFilm.trim().toUpperCase());
+        });
+        setFilterFilms(searchResult);
+        setFilterPage("?Search=" + searchFilm);
+      } else if (category) {
+        const categoryFilms = films.filter((film) => {
+          return film.category
+            .toUpperCase()
+            .includes(category.trim().toUpperCase());
+        });
+        setFilterPage("?Category=" + category);
+        setFilterFilms(categoryFilms);
       }
-    }, 5000);
+    }
   };
-  useEffect(() => {
-    slideEffect();
-  }, [countSlide]);
+
+  const handleChangePage = () => {
+    window.scroll(0, 995);
+  };
   useEffect(() => {
     getDataFilms();
   }, []);
+  useEffect(() => {
+    funcFilterFilms();
+  }, [searchFilm, category, films]);
+  useEffect(() => {
+    document.title = "Home";
+  }, []);
+
   return (
     <div>
-      <Header user={user} setIsSignUp={setIsSignUp}></Header>
+      <Header
+        user={user}
+        setIsSignUp={setIsSignUp}
+        category={category}
+      ></Header>
       <div className={cx("home")}>
         <div className={cx("slider")}>
-          <div className={cx("slides-drop")}>
-            <input
-              type="radio"
-              name="radio-btn"
-              id={cx("radio1")}
-              checked={checkedRadio === "radio1"}
-            />
-            <input
-              type="radio"
-              name="radio-btn"
-              id={cx("radio2")}
-              checked={checkedRadio === "radio2"}
-            />
-            <input
-              type="radio"
-              name="radio-btn"
-              id={cx("radio3")}
-              checked={checkedRadio === "radio3"}
-            />
-            <input
-              type="radio"
-              name="radio-btn"
-              id={cx("radio4")}
-              checked={checkedRadio === "radio4"}
-            />
-
-            <div className={cx("slide", "first")}>
-              <img src={imgBanner1} alt="" />
-              <div className={cx("slider-text")}>
-                <div className={cx("container")}>
-                  <div className={cx("text-heading")}>
-                    <h3>Doraemon: Cuộc phiêu lưu của Yasuo và Yone!</h3>
-                  </div>
-                  <div className={cx("text-description")}>
-                    <p>
-                      Năm phát hành: <span>1998</span>
-                    </p>
-                  </div>
-                  <button className={cx("button-slider")}>CHI TIẾT</button>
-                </div>
-              </div>
-            </div>
-            <SlideHome
-              imgSlide={imgBanner3}
-              nameTitle={"Doraemon: Cuộc phiêu lưu của Yasuo và Yone!"}
-              releaseYear={"Năm phát hành:"}
-              year={1998}
-              detail={"Chi tiết"}
-            />
-            <SlideHome
-              imgSlide={imgBanner3}
-              nameTitle={"Doraemon: Cuộc phiêu lưu của Yasuo và Yone!"}
-              releaseYear={"Năm phát hành:"}
-              year={1998}
-              detail={"Chi tiết"}
-            />
-            <SlideHome
-              imgSlide={imgBanner3}
-              nameTitle={"Doraemon: Cuộc phiêu lưu của Yasuo và Yone!"}
-              releaseYear={"Năm phát hành:"}
-              year={1998}
-              detail={"Chi tiết"}
-            />
-
-            <div className={cx("navigation-manual", "container")}>
-              <ul>
-                <li>
-                  <label htmlFor="radio1" className={cx("manual-btn")}>
-                    {" "}
-                  </label>
-                </li>
-                <li>
-                  <label htmlFor="radio2" className={cx("manual-btn")}>
-                    {" "}
-                  </label>
-                </li>
-                <li>
-                  <label htmlFor="radio3" className={cx("manual-btn")}>
-                    {" "}
-                  </label>
-                </li>
-                <li>
-                  <label htmlFor="radio4" className={cx("manual-btn")}>
-                    {" "}
-                  </label>
-                </li>
-              </ul>
-            </div>
-
-            <div className={cx("navigation-auto", "container")}>
-              <ul>
-                <li>
-                  <div className={cx("auto-btn1")} />
-                </li>
-                <li>
-                  <div className={cx("auto-btn2")} />
-                </li>
-                <li>
-                  <div className={cx("auto-btn3")} />
-                </li>
-                <li>
-                  <div className={cx("auto-btn4")} />
-                </li>
-              </ul>
-            </div>
-          </div>
-
+          <SlideHome></SlideHome>
           <div className={cx("slider-up", "container")}>
             <div className={cx("text-hot-series")}>
               <h3>
-                <button />
+                <button disabled />
                 <span>Hot Series</span>
               </h3>
             </div>
             <div className={cx("img-hot-series")}>
               <div className={cx("mySlides")}>
-                <HotSlide href="#" img={imgSlideUp1} />
-                <HotSlide href="#" img={imgSlideUp1} />
-                <HotSlide href="#" img={imgSlideUp1} />
-                <HotSlide href="#" img={imgSlideUp1} />
-                <HotSlide href="#" img={imgSlideUp1} />
-                <HotSlide href="#" img={imgSlideUp1} />
+                <HotSlide
+                  href="/ListEpisode/One%20Piece"
+                  img={imgSlideUp1}
+                  classname="first"
+                />
+                <HotSlide
+                  href="/ListEpisode/Doraemon%20New%20TV%20Series"
+                  img={imgSlideUp2}
+                  classname="first"
+                />
+                <HotSlide
+                  href="/ListEpisode/Naruto%20Shippuuden"
+                  img={imgSlideUp3}
+                  classname="first"
+                />
+                <HotSlide
+                  href="/ListEpisode/Kimetsu%20no%20Yaiba"
+                  img={imgSlideUp4}
+                  classname="last"
+                />
+                <HotSlide to="#" img={imgSlideUp5} classname="last" />
+                <HotSlide
+                  href="/ListEpisode/Pocket%20Monsters%202019"
+                  img={imgSlideUp6}
+                  classname="last"
+                />
               </div>
             </div>
           </div>
         </div>
 
-        <div className={cx("adds", "container")}>
-          <img src={imgAdds} />
-        </div>
-
         <div className={cx("content", "container")}>
           <div className={cx("text-content")}>
             <h3>
-              <button />
+              <button disabled />
               <span>Phim Mới</span>
             </h3>
           </div>
-          <Container fluid="md">
-            <Row>
-              {isHasData ? (
+          <Row gutter={[16, 6]} justify="space-around">
+            {isHasData ? (
+              filterFilms ? (
+                filterFilms.length > 0 ? (
+                  filterFilms.map((film, index) => {
+                    if (index >= page * 30 - 30 && index <= 30 * page - 1)
+                      return (
+                        <Col className={cx("col1")} key={index} span={4}>
+                          <CardFilm
+                            href={"/ListEpisode/" + film.filmName}
+                            imgUrl={film.url}
+                            name={film.filmName}
+                            episode={film.episodeCount}
+                            duration={film.duration}
+                          ></CardFilm>
+                        </Col>
+                      );
+                  })
+                ) : (
+                  <span className={cx("Not-found")}>
+                    Không tìm thấy kết quả
+                  </span>
+                )
+              ) : (
                 films.map((film, index) => {
                   if (index >= page * 30 - 30 && index <= 30 * page - 1)
                     return (
-                      <Col key={index}>
+                      <Col className={cx("col1")} key={index}>
                         <CardFilm
                           href={"/ListEpisode/" + film.filmName}
                           imgUrl={film.url}
                           name={film.filmName}
-                          episode={1}
+                          episode={film.episodeCount}
                           duration={film.duration}
                         ></CardFilm>
                       </Col>
                     );
                 })
-              ) : (
-                <div className={cx("loading-wrapper")}>
-                  <LoadingOutlined className={cx("loading-icon")} />
-                </div>
-              )}
-            </Row>
-          </Container>
+              )
+            ) : (
+              <div className={cx("loading-wrapper")}>
+                <LoadingOutlined className={cx("loading-icon")} />
+              </div>
+            )}
+          </Row>
+          {/* Param Search */}
           {isHasData ? (
-            <div className={cx("pagination")}>
-              <a href={"/" + (Number(page) - 1)}>&lt;&lt;</a>
-              <a className={page === "1" ? cx("active") : <></>} href="/1">
-                1
-              </a>
-              <a href="/2" className={page === "2" ? cx("active") : <></>}>
-                2
-              </a>
-              <a href="/3" className={page === "3" ? cx("active") : <></>}>
-                3
-              </a>
-              <span>...</span>
-              {page !== "1" && page !== "2" && page !== "3" ? (
-                <>
-                  <a href={"/" + page}>{page}</a>
-                  <span>...</span>
-                </>
-              ) : (
-                <></>
-              )}
-              <a href={"/" + (Number(page) + 1)}>&gt;&gt;</a>
-            </div>
+            filterFilms && filterFilms.length > 0 ? (
+              <div className={cx("pagination")}>
+                <Link
+                  to={"/" + (Number(page) - 1) + filterPage}
+                  className={cx(
+                    "page",
+                    Number(page) > 1 &&
+                      Number.parseInt(filterFilms.length / 30) + 1 > 4
+                      ? ""
+                      : "hide"
+                  )}
+                  onClick={handleChangePage}
+                >
+                  &lt;&lt;
+                </Link>
+                <Link
+                  className={cx(
+                    "page",
+                    Number(page) <=
+                      Number.parseInt(filterFilms.length / 30) + 1 - 3
+                      ? "active"
+                      : "",
+                    Number.parseInt(filterFilms.length / 30) + 1 < 4
+                      ? "hide"
+                      : ""
+                  )}
+                  to={
+                    "/" +
+                    (Number(page) + 3 >
+                    Number.parseInt(filterFilms.length / 30) + 1
+                      ? Number.parseInt(filterFilms.length / 30) + 1 - 3
+                      : Number(page)) +
+                    filterPage
+                  }
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 >
+                  Number.parseInt(filterFilms.length / 30) + 1
+                    ? Number.parseInt(filterFilms.length / 30) + 1 - 3
+                    : Number(page)}
+                </Link>
+                <Link
+                  to={
+                    "/" +
+                    (Number(page) + 3 >
+                    Number.parseInt(filterFilms.length / 30) + 1
+                      ? Number.parseInt(filterFilms.length / 30) + 1 - 2
+                      : Number(page) + 1) +
+                    filterPage
+                  }
+                  className={cx(
+                    "page",
+                    Number(page) ===
+                      Number.parseInt(filterFilms.length / 30) + 1 - 2
+                      ? "active"
+                      : "",
+                    Number.parseInt(filterFilms.length / 30) + 1 < 3
+                      ? "hide"
+                      : ""
+                  )}
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 >
+                  Number.parseInt(filterFilms.length / 30) + 1
+                    ? Number.parseInt(filterFilms.length / 30) + 1 - 2
+                    : Number(page) + 1}
+                </Link>
+                <Link
+                  to={
+                    "/" +
+                    (Number(page) + 3 >
+                    Number.parseInt(filterFilms.length / 30) + 1
+                      ? Number.parseInt(filterFilms.length / 30) + 1 - 1
+                      : Number(page) + 2) +
+                    filterPage
+                  }
+                  className={cx(
+                    "page",
+                    Number(page) ===
+                      Number.parseInt(filterFilms.length / 30) + 1 - 1
+                      ? "active"
+                      : "",
+                    Number.parseInt(filterFilms.length / 30) + 1 < 2
+                      ? "hide"
+                      : ""
+                  )}
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 >
+                  Number.parseInt(filterFilms.length / 30) + 1
+                    ? Number.parseInt(filterFilms.length / 30) + 1 - 1
+                    : Number(page) + 2}
+                </Link>
+                <Link
+                  to={
+                    "/" +
+                    (Number(page) + 3 >
+                    Number.parseInt(filterFilms.length / 30) + 1
+                      ? Number.parseInt(filterFilms.length / 30) + 1
+                      : Number(page) + 3) +
+                    filterPage
+                  }
+                  className={cx(
+                    "page",
+                    Number(page) ===
+                      Number.parseInt(filterFilms.length / 30) + 1
+                      ? "active"
+                      : "",
+                    Number.parseInt(filterFilms.length / 30) + 1 < 1
+                      ? "hide"
+                      : ""
+                  )}
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 >
+                  Number.parseInt(filterFilms.length / 30) + 1
+                    ? Number.parseInt(filterFilms.length / 30) + 1
+                    : Number(page) + 3}
+                </Link>
+                <Link
+                  to={"/" + (Number(page) + 1) + filterPage}
+                  className={cx(
+                    "page",
+                    Number(page) + 3 <
+                      Number.parseInt(filterFilms.length / 30) + 1
+                      ? ""
+                      : "hide"
+                  )}
+                  onClick={handleChangePage}
+                >
+                  &gt;&gt;
+                </Link>
+              </div>
+            ) : (
+              <div className={cx("pagination")}>
+                <Link
+                  to={"/" + (Number(page) - 1) + filterPage}
+                  className={cx(
+                    "page",
+                    Number(page) > 1 &&
+                      Number.parseInt(films.length / 30) + 1 > 4
+                      ? ""
+                      : "hide"
+                  )}
+                  onClick={handleChangePage}
+                >
+                  &lt;&lt;
+                </Link>
+                <Link
+                  className={cx(
+                    "page",
+                    Number(page) <= Number.parseInt(films.length / 30) + 1 - 3
+                      ? "active"
+                      : "",
+                    Number.parseInt(films.length / 30) + 1 < 4 ? "hide" : ""
+                  )}
+                  to={
+                    "/" +
+                    (Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                      ? Number.parseInt(films.length / 30) + 1 - 3
+                      : Number(page)) +
+                    filterPage
+                  }
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                    ? Number.parseInt(films.length / 30) + 1 - 3
+                    : Number(page)}
+                </Link>
+                <Link
+                  to={
+                    "/" +
+                    (Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                      ? Number.parseInt(films.length / 30) + 1 - 2
+                      : Number(page) + 1) +
+                    filterPage
+                  }
+                  className={cx(
+                    "page",
+                    Number(page) === Number.parseInt(films.length / 30) + 1 - 2
+                      ? "active"
+                      : "",
+                    Number.parseInt(films.length / 30) + 1 < 3 ? "hide" : ""
+                  )}
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                    ? Number.parseInt(films.length / 30) + 1 - 2
+                    : Number(page) + 1}
+                </Link>
+                <Link
+                  to={
+                    "/" +
+                    (Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                      ? Number.parseInt(films.length / 30) + 1 - 1
+                      : Number(page) + 2) +
+                    filterPage
+                  }
+                  className={cx(
+                    "page",
+                    Number(page) === Number.parseInt(films.length / 30) + 1 - 1
+                      ? "active"
+                      : "",
+                    Number.parseInt(films.length / 30) + 1 < 2 ? "hide" : ""
+                  )}
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                    ? Number.parseInt(films.length / 30) + 1 - 1
+                    : Number(page) + 2}
+                </Link>
+                <Link
+                  to={
+                    "/" +
+                    (Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                      ? Number.parseInt(films.length / 30) + 1
+                      : Number(page) + 3) +
+                    filterPage
+                  }
+                  className={cx(
+                    "page",
+                    Number(page) === Number.parseInt(films.length / 30) + 1
+                      ? "active"
+                      : "",
+                    Number.parseInt(films.length / 30) + 1 < 1 ? "hide" : ""
+                  )}
+                  onClick={handleChangePage}
+                >
+                  {Number(page) + 3 > Number.parseInt(films.length / 30) + 1
+                    ? Number.parseInt(films.length / 30) + 1
+                    : Number(page) + 3}
+                </Link>
+                <Link
+                  to={"/" + (Number(page) + 1) + filterPage}
+                  className={cx(
+                    "page",
+                    Number(page) + 3 < Number.parseInt(films.length / 30) + 1
+                      ? ""
+                      : "hide"
+                  )}
+                  onClick={handleChangePage}
+                >
+                  &gt;&gt;
+                </Link>
+              </div>
+            )
           ) : (
             <></>
           )}

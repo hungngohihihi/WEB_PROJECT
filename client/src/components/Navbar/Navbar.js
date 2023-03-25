@@ -5,6 +5,7 @@ import {
   CloseOutlined,
   LoadingOutlined,
 } from "@ant-design/icons";
+import Swal from "sweetalert2";
 
 import styles from "./Navbar.module.scss";
 import CardFilm from "./cardFilm";
@@ -12,85 +13,84 @@ import Comment from "./Comment";
 import axios from "axios";
 import Episode from "./episode/Episode";
 import { Col, Row } from "antd";
+import defaultUser from "../../imgs/user_default.png";
+import EpisodeHeader from "./EpisodeHeader/EpisodeHeader";
 
 const cx = classNames.bind(styles);
 
-function Navbar({ user, episodeFilm, film }) {
+function Navbar({ user, episodeFilm, film, episodeID }) {
   const [key, setKey] = useState("episode");
+  const [subKey, setSubKey] = useState(
+    Number.parseInt(episodeFilm.length / 100)
+  );
   const [comments, setComments] = useState([]);
   const [userComment, setUserComment] = useState("");
   const [commentParentID, setCommentParentID] = useState();
   const [isRepping, setIsRepping] = useState("");
   const [checkForComment, setCheckForComment] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [top10Films, setTop10Films] = useState();
   const inputElement = useRef();
-
-  const Films = [
-    {
-      href: "#",
-      id: 1,
-      img: "https://vnw-img-cdn.popsww.com/api/v2/containers/file2/cms_topic/doraemon_t_p_m_i_xem_ngay-1152f671c7e3-1667616000071-RwrJYn8Z.png?v=0&maxW=300&format=webp",
-      name: "Doraemon",
-      time: 1979,
-      rate: "7+",
-      product: "TV Asashi VN",
-      des: "Doraemon được mua bản quyền và được cập nhật phát sóng mới nhất trên ứng dụng giải trí POPS. Đây là bộ phim hoạt hình chuyển thể từ truyện tranh hấp dẫn nhất Nhật Bản: Doraemon của tác giả Fujiko Fujio sáng tác từ năm 1969.Bộ truyện kể về một chú mèo máy tên Doraemon đến từ thế kỉ 22 để giúp một cậu bé lớp 5 hậu đậu tên là Nobi Nobita. Sewashi (Nobito), cháu ba đời của Nobita gửi Doraemon về quá khứ nhằm giúp đỡ ông mình, qua đó cải thiện được hoàn cảnh của con cháu Nobita sau này. Các tập phim Doraemon thường xoay quanh những rắc rối hay xảy ra với cậu bé Nobita. Cốt truyện thường gặp nhất là Nobita trở về nhà khóc lóc với Doraemon vì những rắc rối mà cậu gặp phải ở trường học hoặc với bạn bè. Sau khi bị cậu van nài hoặc thúc giục, Doraemon sẽ lấy ra một bảo bối trong chiếc túi thần kỳ trước bụng để giúp Nobita giải quyết rắc rối của mình.Nhưng Nobita sẽ lại thường đi quá xa so với dự định ban đầu của Doraemon. Cậu thường lấy sự ưu việt của bảo bối để trêu ghẹo mọi người nên cuối cùng bị phản tác dụng, bị bảo bối gây phiền phức. Có đôi khi những người bạn của Nobita, thường là Suneo hoặc Jaian lại lấy trộm những bảo bối và sử dụng chúng không đúng mục đích. Kết thúc mỗi câu chuyện, những ai sử dụng sai mục đích bảo bối sẽ phải chịu hậu quả do mình gây ra, từ đó khán giả sẽ rút ra được bài học cho riêng mình. Doraemon là bộ phim hoạt hình thiếu nhi mang lại cho khán giả những tràng cười thoải mái, những tình huống vui nhộn cùng những bài học giáo dục đầy ý nghĩa. Phim được lồng tiếng với chất lượng hình ảnh sắc nét mang lại trải nghiệm xem phim tuyệt vời. Xem trọn bộ Doraemon full HD ngay tại POPS bạn nhé.",
-    },
-    {
-      href: "#",
-      id: 2,
-      img: "https://vnw-img-cdn.popsww.com/api/v2/containers/file2/cms_topic/doraemon_t_p_m_i_xem_ngay-1152f671c7e3-1667616000071-RwrJYn8Z.png?v=0&maxW=300&format=webp",
-      name: "Doraemon",
-      time: 1979,
-      rate: "7+",
-      product: "TV Asashi VN",
-      des: "Doraemon được mua bản quyền và được cập nhật phát sóng mới nhất trên ứng dụng giải trí POPS. Đây là bộ phim hoạt hình chuyển thể từ truyện tranh hấp dẫn nhất Nhật Bản: Doraemon của tác giả Fujiko Fujio sáng tác từ năm 1969.Bộ truyện kể về một chú mèo máy tên Doraemon đến từ thế kỉ 22 để giúp một cậu bé lớp 5 hậu đậu tên là Nobi Nobita. Sewashi (Nobito), cháu ba đời của Nobita gửi Doraemon về quá khứ nhằm giúp đỡ ông mình, qua đó cải thiện được hoàn cảnh của con cháu Nobita sau này. Các tập phim Doraemon thường xoay quanh những rắc rối hay xảy ra với cậu bé Nobita. Cốt truyện thường gặp nhất là Nobita trở về nhà khóc lóc với Doraemon vì những rắc rối mà cậu gặp phải ở trường học hoặc với bạn bè. Sau khi bị cậu van nài hoặc thúc giục, Doraemon sẽ lấy ra một bảo bối trong chiếc túi thần kỳ trước bụng để giúp Nobita giải quyết rắc rối của mình.Nhưng Nobita sẽ lại thường đi quá xa so với dự định ban đầu của Doraemon. Cậu thường lấy sự ưu việt của bảo bối để trêu ghẹo mọi người nên cuối cùng bị phản tác dụng, bị bảo bối gây phiền phức. Có đôi khi những người bạn của Nobita, thường là Suneo hoặc Jaian lại lấy trộm những bảo bối và sử dụng chúng không đúng mục đích. Kết thúc mỗi câu chuyện, những ai sử dụng sai mục đích bảo bối sẽ phải chịu hậu quả do mình gây ra, từ đó khán giả sẽ rút ra được bài học cho riêng mình. Doraemon là bộ phim hoạt hình thiếu nhi mang lại cho khán giả những tràng cười thoải mái, những tình huống vui nhộn cùng những bài học giáo dục đầy ý nghĩa. Phim được lồng tiếng với chất lượng hình ảnh sắc nét mang lại trải nghiệm xem phim tuyệt vời. Xem trọn bộ Doraemon full HD ngay tại POPS bạn nhé.",
-    },
-    {
-      href: "#",
-      id: 3,
-      img: "https://vnw-img-cdn.popsww.com/api/v2/containers/file2/cms_topic/doraemon_t_p_m_i_xem_ngay-1152f671c7e3-1667616000071-RwrJYn8Z.png?v=0&maxW=300&format=webp",
-      name: "Doraemon",
-      time: 1979,
-      rate: "7+",
-      product: "TV Asashi VN",
-      des: "Doraemon được mua bản quyền và được cập nhật phát sóng mới nhất trên ứng dụng giải trí POPS. Đây là bộ phim hoạt hình chuyển thể từ truyện tranh hấp dẫn nhất Nhật Bản: Doraemon của tác giả Fujiko Fujio sáng tác từ năm 1969.Bộ truyện kể về một chú mèo máy tên Doraemon đến từ thế kỉ 22 để giúp một cậu bé lớp 5 hậu đậu tên là Nobi Nobita. Sewashi (Nobito), cháu ba đời của Nobita gửi Doraemon về quá khứ nhằm giúp đỡ ông mình, qua đó cải thiện được hoàn cảnh của con cháu Nobita sau này. Các tập phim Doraemon thường xoay quanh những rắc rối hay xảy ra với cậu bé Nobita. Cốt truyện thường gặp nhất là Nobita trở về nhà khóc lóc với Doraemon vì những rắc rối mà cậu gặp phải ở trường học hoặc với bạn bè. Sau khi bị cậu van nài hoặc thúc giục, Doraemon sẽ lấy ra một bảo bối trong chiếc túi thần kỳ trước bụng để giúp Nobita giải quyết rắc rối của mình.Nhưng Nobita sẽ lại thường đi quá xa so với dự định ban đầu của Doraemon. Cậu thường lấy sự ưu việt của bảo bối để trêu ghẹo mọi người nên cuối cùng bị phản tác dụng, bị bảo bối gây phiền phức. Có đôi khi những người bạn của Nobita, thường là Suneo hoặc Jaian lại lấy trộm những bảo bối và sử dụng chúng không đúng mục đích. Kết thúc mỗi câu chuyện, những ai sử dụng sai mục đích bảo bối sẽ phải chịu hậu quả do mình gây ra, từ đó khán giả sẽ rút ra được bài học cho riêng mình. Doraemon là bộ phim hoạt hình thiếu nhi mang lại cho khán giả những tràng cười thoải mái, những tình huống vui nhộn cùng những bài học giáo dục đầy ý nghĩa. Phim được lồng tiếng với chất lượng hình ảnh sắc nét mang lại trải nghiệm xem phim tuyệt vời. Xem trọn bộ Doraemon full HD ngay tại POPS bạn nhé.",
-    },
-  ];
 
   const getComment = async () => {
     setIsLoading(false);
-
     try {
-      const res = await (await axios.get("/api/user/comment")).data;
+      const res = await (
+        await axios.get(
+          "/api/comment?filmID=" + film.filmID + "&episodeID=" + episodeID
+        )
+      ).data;
       setComments(res);
       setIsLoading(true);
     } catch (error) {
       console.log(error);
     }
   };
-
+  const getDataFilms = async () => {
+    try {
+      setIsLoading(false);
+      const res = await axios.get("/api/film/getFilm");
+      let top10Film = [];
+      for (let i = 0; i < 10; i++) {
+        top10Film.push(res.data[i]);
+      }
+      setTop10Films(top10Film);
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const handleSendComment = async (comment) => {
-    if (user) {
-      const req = await axios.post("/api/user/comment", {
+    if (user.userId) {
+      const req = await axios.post("/api/comment", {
         userID: user.userId,
         commentParentID: commentParentID,
         comment: comment,
-        filmID: 1,
+        filmID: film.filmID,
         likeCount: 0,
+        episodeID: episodeID,
       });
       setCheckForComment(!checkForComment);
 
       setCommentParentID();
       setUserComment("");
       setIsRepping("");
+    } else {
+      Swal.fire({
+        title: "Bạn Cần Đăng Nhập Để Comment!",
+        icon: "warning",
+        showCloseButton: true,
+      });
     }
   };
 
   useEffect(() => {
     getComment();
   }, [checkForComment]);
+
+  useEffect(() => {
+    getDataFilms();
+  }, []);
 
   return (
     <div className={cx("wrapper")}>
@@ -117,8 +117,8 @@ function Navbar({ user, episodeFilm, film }) {
 
       <div className={cx("container")}>
         {key === "more" ? (
-          Films.map((film) => {
-            return <CardFilm key={film.id} props={film}></CardFilm>;
+          top10Films.map((film) => {
+            return <CardFilm key={film.filmID} props={film}></CardFilm>;
           })
         ) : (
           <></>
@@ -133,10 +133,7 @@ function Navbar({ user, episodeFilm, film }) {
               <div>
                 <div className={cx("user-comment")}>
                   <div className={cx("user-comment-avatar")}>
-                    <img
-                      src="https://products.popsww.com/api/v2/containers/file2/profiles/Adult-01.png"
-                      alt="Avatar"
-                    />
+                    <img src={user.avatar || defaultUser} alt="Avatar" />
                   </div>
                   <div className={cx("user-comment-input")}>
                     <input
@@ -197,23 +194,55 @@ function Navbar({ user, episodeFilm, film }) {
         {key === "episode" ? (
           <div>
             {episodeFilm ? (
-              <Row gutter={[6, 6]}>
-                {episodeFilm.map((episode, index) => {
-                  return (
-                    <Col span={4} key={index}>
-                      <Episode
-                        href={
-                          "/WatchFilm/" +
-                          film.filmName +
-                          "?episode=" +
-                          episode.episodeID
-                        }
-                        episode={episode?.episodeID}
-                      ></Episode>
-                    </Col>
-                  );
-                })}
-              </Row>
+              episodeFilm.length > 100 ? (
+                <div>
+                  <EpisodeHeader
+                    episodeLength={episodeFilm.length / 100}
+                    callBack={setSubKey}
+                    subKey={subKey}
+                  ></EpisodeHeader>
+                  <Row gutter={[6, 6]}>
+                    {episodeFilm.map((episode, index) => {
+                      if (
+                        episode.episodeID >= subKey * 100 + 1 &&
+                        episode.episodeID <= subKey * 100 + 100
+                      ) {
+                        return (
+                          <Col span={4} key={index}>
+                            <Episode
+                              href={
+                                "/WatchFilm/" +
+                                film.filmName +
+                                "?episode=" +
+                                episode.episodeID
+                              }
+                              episode={episode?.episodeID}
+                            ></Episode>
+                          </Col>
+                        );
+                      }
+                    })}
+                  </Row>
+                </div>
+              ) : (
+                <Row gutter={[6, 6]}>
+                  {episodeFilm.map((episode, index) => {
+                    return (
+                      <Col span={4} key={index}>
+                        <Episode
+                          href={
+                            "/WatchFilm/" +
+                            film.filmName +
+                            "?episode=" +
+                            episode.episodeID
+                          }
+                          episode={episode?.episodeID}
+                        ></Episode>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              )
             ) : (
               <></>
             )}

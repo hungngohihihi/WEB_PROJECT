@@ -81,6 +81,11 @@
     width: 14px;
     margin-left: 4px;
   }
+
+  .comment-body_options-left {
+    display: flex;
+    flex-wrap: wrap;
+  }
 }
 
 .show-comment {
@@ -99,5 +104,19 @@
     position: absolute;
     top: 34%;
     right: -14px;
+  }
+}
+
+// Responsive
+@media only screen and (max-width: 600px) {
+  .comment {
+    font-size: 1.2rem;
+
+    span {
+      font-size: 1.2rem;
+    }
+    .message-name {
+      margin: 0;
+    }
   }
 }

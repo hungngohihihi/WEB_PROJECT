@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.31, for Win64 (x86_64)
 --
--- Host: localhost    Database: web_film
+-- Host: localhost    Database: test
 -- ------------------------------------------------------
 -- Server version	8.0.31
 
@@ -40,7 +40,7 @@ CREATE TABLE `comment` (
   CONSTRAINT `episodeID` FOREIGN KEY (`episodeID`) REFERENCES `episode_film` (`episodeID`),
   CONSTRAINT `film` FOREIGN KEY (`filmID`) REFERENCES `film` (`filmID`),
   CONSTRAINT `userID` FOREIGN KEY (`userID`) REFERENCES `login_user` (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,9 +68,8 @@ DROP TABLE IF EXISTS `film`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `film` (
-  `filmName` varchar(100) DEFAULT NULL,
+  `filmName` varchar(500) DEFAULT NULL,
   `status` tinyint DEFAULT NULL,
-  `point` float DEFAULT NULL,
   `year` int DEFAULT NULL,
   `duration` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   `description` text NOT NULL,
@@ -119,7 +118,25 @@ CREATE TABLE `login_user` (
   `status` tinyint DEFAULT NULL,
   `create_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rate_film`
+--
+
+DROP TABLE IF EXISTS `rate_film`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `rate_film` (
+  `userID` int NOT NULL,
+  `filmID` int NOT NULL,
+  `rate` float DEFAULT NULL,
+  PRIMARY KEY (`userID`,`filmID`),
+  KEY `fk_filmID_idx` (`filmID`),
+  CONSTRAINT `fk_filmID` FOREIGN KEY (`filmID`) REFERENCES `film` (`filmID`),
+  CONSTRAINT `fk_userID` FOREIGN KEY (`userID`) REFERENCES `login_user` (`userID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -145,4 +162,4 @@ CREATE TABLE `rule_admin` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-03 21:23:58
+-- Dump completed on 2023-02-08  9:36:39

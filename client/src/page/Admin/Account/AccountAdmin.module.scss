@@ -1,0 +1,247 @@
+.collapse .main-container {
+    width: 100%;
+}
+
+.main-container .card {
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    background: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    margin-top: 90px;
+    margin-left: 280px;
+}
+
+.table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 15px;
+    min-width: 100%;
+    overflow: hidden;
+    border-radius: 5px 5px 0 0;
+}
+
+.table_head {
+    text-align: center;
+}
+
+table thead tr {
+    color: #fff;
+    background: #3498DB;
+    text-align: left;
+    font-weight: bold;
+}
+
+.table th,
+.table td {
+    padding: 12px 15px;
+}
+
+.table tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:nth-of-type(odd) {
+    background: #f3f3f3;
+}
+
+
+.table tbody tr:last-of-type {
+    border-bottom: 2px solid #3498DB;
+}
+
+.table button {
+    padding: 6px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #3498DB;
+}
+
+.table button:hover {
+    background: #3498DB;
+    color: #fff;
+    transition: 0.5rem;
+}
+
+.search {
+    height: 30px;
+    display: flex;
+    cursor: pointer;
+    padding: 10px  20px;
+    background: #fff;
+    border-radius: 10px;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 250px;
+    margin-left: 80%;
+}
+
+.search:hover input {
+    width: 250px;
+}
+
+.search input {
+    width: 0;
+    outline:none;
+    border: none;
+    font-weight: 500;
+    transition: 0.8s;
+    background: transparent;
+}
+
+.add {
+    height: 30px;
+    display: flex;
+    cursor: pointer;
+    padding: 10px  20px;
+    background: #fff;
+    border-radius: 10px;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    width: 250px;
+}
+
+.pagination {
+	padding: 5px 0;
+	text-align: center;
+}
+
+.pagination a {
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 700;
+	color: #3498DB;
+	height: 30px;
+	width: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+
+.pagination a:hover {
+	border-color: #69a8d1;
+}
+
+.pagination span {
+	display: inline-block;
+	font-size: 16px;
+	font-weight: 700;
+	color: #3498DB;
+	padding-left: 10px;
+	padding-right: 15px;
+}
+
+.container {
+    position: relative;
+    max-width: 700px;
+    width: 100%;
+    background: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.container .form {
+    margin-top: 30px;
+}
+
+.form h1 {
+    text-align: center;
+}
+
+.form .input-box {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.input-box label {
+    color: #333;
+    font-weight: bold;
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    
+}
+
+.form :where(.input-box input, .select-box) {
+    position: relative;
+    height: 40px;
+    width: 100%;
+    outline: none;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+    color: #707070;
+    margin-top: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0 15px;
+}
+
+.input-box input:focus {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.form .column {
+    display: flex;
+    column-gap: 15px;
+}
+
+.form .status-box {
+    margin-top: 20px;
+}
+
+.status-box h3 {
+    color: #333;
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.form :where(.status-option, .status) {
+    display: flex;
+    align-items: center;
+    column-gap: 50px;
+    flex-wrap: wrap;
+}
+
+.form .status {
+    column-gap: 5px;
+}
+
+.status input {
+    accent-color: #69a8d1;
+}
+
+.form :where(.status input, .status label) {
+    cursor: pointer;
+}
+
+.status label {
+    color: #707070;
+}
+
+.select-box select {
+    height: 100%;
+    width: 100%;
+    outline: none;
+    border: none;
+    color: #707070;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+}
+
+.form button {
+    font-family: "Roboto", sans-serif;
+    font-size: 18px;
+    height: 45px;
+    width: 100%;
+    color: #fff;
+    margin-top: 30px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: #69a8d1;
+}
+
+.form button:hover {
+    background: #8FC5E9;
+}

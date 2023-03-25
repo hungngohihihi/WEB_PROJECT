@@ -1,0 +1,50 @@
+.wrapper {
+  color: var(--white);
+  width: 360px;
+  overflow: hidden;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.film-item {
+  width: 100%;
+  display: flex;
+  border-radius: 4px;
+  color: var(--white);
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #333;
+
+  &:hover {
+    background-color: #313131;
+  }
+}
+
+.film-img {
+  height: 80px;
+  padding: 0 12px;
+  img {
+    height: 100%;
+    object-fit: cover;
+    text-align: center;
+  }
+}
+
+.film-info {
+  flex: 1;
+}
+
+.top,
+.bottom {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.film-time {
+  padding-left: 4px;
+}

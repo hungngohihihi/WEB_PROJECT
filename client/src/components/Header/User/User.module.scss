@@ -1,29 +1,12 @@
-.comment-avatar {
-    width: 10%;
-    font-family: "Roboto", sans-serif;
-    font-size: 16px;
-    padding: 7px 10px;
-    background-color: var(--primary);
-    color: var(--white);
-    border: 2px solid;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-    margin-left: 20px;
-    &:hover {
-        background-color: var(--white);
-        border: 2px solid var(--primary);
-        color: var(--primary);
-        box-shadow: 0 5px 10px 0 var(--header-box-shadow-button-hover);
-    }
+.wrapper {
+  margin: 0 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
 
-    img {
-        width: 33px;
-        height: 33px;
-        border-radius: 50%;
-    }
-
-    span {
-        margin-left: 10px;
-    }
+.user-avatar {
+  max-height: 33px;
+  object-fit: cover;
+  border-radius: 999px;
 }

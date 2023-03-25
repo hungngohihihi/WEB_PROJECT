@@ -18,16 +18,6 @@ const TextInformation = (props) => {
         {props.title}
       </span>
       <span dangerouslySetInnerHTML={{ __html: props.text }} />
-      {/* {props.callBack ? (
-        <span
-          className={cx("hide_option")}
-          onClick={props.callBack(!props.hide)}
-        >
-          {props.hide ? "Xem thêm" : "Thu gọn"}
-        </span>
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 };

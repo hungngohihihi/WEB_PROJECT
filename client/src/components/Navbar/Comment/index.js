@@ -1,11 +1,14 @@
 import { UpOutlined, DownOutlined } from "@ant-design/icons";
 import classNames from "classnames/bind";
+import { useState } from "react";
 import CommentChild from "../CommentChild";
 import styles from "./Comment.module.scss";
 
 const cx = classNames.bind(styles);
 
 function Comment({ data, commentChilds, callBack, inputElement }) {
+  const [isShowCommentChild, setIsShowCommentChild] = useState(false);
+
   const handleRep = () => {
     inputElement.current.focus();
     callBack[0](data.commentID);
@@ -28,7 +31,7 @@ function Comment({ data, commentChilds, callBack, inputElement }) {
           <span className={cx("message-main")}>{data.comment}</span>
         </div>
         <div className={cx("comment-body_options")}>
-          <div>
+          <div className={cx("comment-body_options-left")}>
             <span className={cx("option", "disable")}>{data.time}</span>
             <span className={cx("option")}>Thích</span>
             <span className={cx("option")} onClick={handleRep}>
@@ -55,7 +58,7 @@ function Comment({ data, commentChilds, callBack, inputElement }) {
           )}
         </div>
         <div className={cx("show-comment")}>
-          {commentChilds.length > 0 ? (
+          {isShowCommentChild ? (
             commentChilds.map((commentChild, index) => {
               return (
                 <CommentChild key={index} data={commentChild}></CommentChild>
@@ -65,17 +68,27 @@ function Comment({ data, commentChilds, callBack, inputElement }) {
             <></>
           )}
 
-          {commentChilds ? (
-            <span className={cx("show-option")}>
-              Ẩn câu trả lời
-              {/* Xem câu trả lời */}
-              {commentChilds ? (
-                <UpOutlined className={cx("show-icon")} />
+          {commentChilds.length > 0 ? (
+            <div>
+              {isShowCommentChild ? (
+                <span
+                  className={cx("show-option")}
+                  onClick={() => setIsShowCommentChild(!isShowCommentChild)}
+                >
+                  Ẩn câu trả lời
+                  <UpOutlined className={cx("show-icon")} />
+                  {/* <DownOutlined className={cx("show-icon")} /> */}
+                </span>
               ) : (
-                <></>
+                <span
+                  className={cx("show-option")}
+                  onClick={() => setIsShowCommentChild(!isShowCommentChild)}
+                >
+                  Hiện câu trả lời
+                  <DownOutlined className={cx("show-icon")} />
+                </span>
               )}
-              {/* <DownOutlined className={cx("show-icon")} /> */}
-            </span>
+            </div>
           ) : (
             <></>
           )}

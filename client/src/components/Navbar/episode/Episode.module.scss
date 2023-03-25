@@ -1,13 +1,20 @@
 .episode {
-    background-color: rgb(80, 80, 80);
-    color: white;
-    width: 100%;
-    text-align: center;
-    font-size: 15px;
-    font-weight: 450;
-    padding: 5px 0px;
+  background-color: rgb(80, 80, 80);
+  color: white;
+  width: 100%;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 450;
+  padding: 5px 0px;
 
-    &:hover {
-        background-color: var(--primary);
-    }
+  &:hover {
+    background-color: var(--primary);
+  }
+}
+
+// Responsive
+@media only screen and (max-width: 400px) {
+  .episode {
+    font-size: 1.4rem;
+  }
 }
